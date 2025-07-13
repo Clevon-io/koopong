@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Koopong',
       theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'Pretendard'),
       home: const HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
