@@ -6,7 +6,6 @@ void main() {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -51,80 +50,99 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header Section
-            _buildHeader(),
-            // Main Content
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Search Bar
-                      _buildSearchBar(),
-                      const SizedBox(height: 24),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Row(
+              children: [
+                const Text('마장동', style: AppTypography.locationText),
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 24,
+                  color: AppColors.textSecondary,
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.qr_code),
+                  color: AppColors.textSecondary,
+                ),
+              ],
+            ),
+            foregroundColor: AppColors.surface,
+            backgroundColor: AppColors.surface,
+            surfaceTintColor: AppColors.surface,
+            elevation: 0,
+            pinned: false,
+            floating: true,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _buildSearchBarWidget(),
+                const SizedBox(height: 8),
 
-                      // Recommendation Section
-                      _buildSectionTitle('쿠덕이의 강력 추천'),
-                      const SizedBox(height: 16),
-                      _buildRecommendationCard(),
-                      const SizedBox(height: 24),
+                // Recommendation Section
+                _buildSectionTitle('쿠덕이의 강력 추천'),
+                const SizedBox(height: 16),
+                _buildRecommendationCard(),
+                const SizedBox(height: 24),
 
-                      // Popular Stores Section
-                      _buildSectionTitle('우리 동네 인기 가게 🏆'),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 220,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return _buildPopularStoreCard(index);
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // New Stores Section
-                      _buildSectionTitle('우리 동네 신규 상점 (new)'),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return _buildNewStoreCard(index);
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Coupon Section
-                      _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 200, // Adjusted height for the new card layout
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            return _buildCouponCard(index);
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 80), // Space for bottom navigation
-                    ],
+                // Popular Stores Section
+                _buildSectionTitle('우리 동네 인기 가게 🏆'),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 250,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      return _buildPopularStoreCard(index);
+                    },
                   ),
                 ),
-              ),
+                const SizedBox(height: 24),
+
+                // New Stores Section
+                _buildSectionTitle('우리 동네 신규 상점 (new)'),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 250,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      return _buildNewStoreCard(index);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Coupon Section
+                _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 2,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      return _buildCouponCard(index);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 80), // Space for bottom navigation
+              ]),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
@@ -142,33 +160,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Row(
-        children: [
-          const Text(
-            '마장동',
-            style: AppTypography.locationText,
-          ),
-          const Icon(
-            Icons.keyboard_arrow_down,
-            size: 24,
-            color: AppColors.textSecondary,
-          ),
-          const Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.qr_code),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBar() {
+  Widget _buildSearchBarWidget() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(100),
@@ -197,10 +191,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: AppTypography.sectionTitle,
-    );
+    return Text(title, style: AppTypography.sectionTitle);
   }
 
   Widget _buildRecommendationCard() {
@@ -227,24 +218,15 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '모락로제떡볶이',
-                  style: AppTypography.h4,
-                ),
+                const Text('모락로제떡볶이', style: AppTypography.h4),
                 const SizedBox(height: 6),
-                const Text(
-                  '떡볶이 & 닭강정',
-                  style: AppTypography.cardSubtitle,
-                ),
+                const Text('떡볶이 & 닭강정', style: AppTypography.cardSubtitle),
                 const SizedBox(height: 8),
                 const Row(
                   children: [
                     Text('❤️', style: AppTypography.caption),
                     SizedBox(width: 4),
-                    Text(
-                      '15명 찜 · 걸어서 2분 (150m)',
-                      style: AppTypography.caption,
-                    ),
+                    Text('15명 찜 · 걸어서 2분 (150m)', style: AppTypography.caption),
                   ],
                 ),
               ],
@@ -262,23 +244,24 @@ class _HomePageState extends State<HomePage> {
       {'name': '페이지10', 'subtitle': '이번 주 리뷰 50+', 'tag': '✨ 분위기 깡패'},
     ];
 
-    return Container(
+    return SizedBox(
       width: 160,
-      margin: const EdgeInsets.only(right: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(
-              Icons.image_outlined,
-              color: Colors.grey[400],
-              size: 50,
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                Icons.image_outlined,
+                color: Colors.grey[400],
+                size: 50,
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -314,23 +297,24 @@ class _HomePageState extends State<HomePage> {
       {'name': '모락 카페', 'subtitle': '디저트 카페', 'tag': '아메리카노 1+1'},
     ];
 
-    return Container(
-      width: 130, // Added fixed width for horizontal ListView
-      margin: const EdgeInsets.only(right: 12),
+    return SizedBox(
+      width: 160, // Added fixed width for horizontal ListView
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 110,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(
-              Icons.image_outlined,
-              color: Colors.grey[400],
-              size: 40,
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                Icons.image_outlined,
+                color: Colors.grey[400],
+                size: 40,
+              ),
             ),
           ),
           Padding(
@@ -374,7 +358,6 @@ class _HomePageState extends State<HomePage> {
 
     return Container(
       width: 180, // Added fixed width for horizontal ListView
-      margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
@@ -383,20 +366,22 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              color: AppColors.primaryWithOpacity(0.1),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+          AspectRatio(
+            aspectRatio: 1.5,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.primaryWithOpacity(0.1),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
               ),
-            ),
-            child: Icon(
-              Icons.percent,
-              color: AppColors.primaryWithOpacity(0.5),
-              size: 50,
+              child: Icon(
+                Icons.percent,
+                color: AppColors.primaryWithOpacity(0.5),
+                size: 50,
+              ),
             ),
           ),
           Padding(
