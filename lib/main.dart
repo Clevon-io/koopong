@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'themes/colors.dart';
+import 'themes/typography.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-// New Color Palette for Light Theme
-const Color lightBgColor = Color(0xFFF9F9F9);
-const Color cardColor = Colors.white;
-const Color primaryColor = Color.fromARGB(255, 222, 168, 6);
-const Color textColor = Color(0xFF121212);
-const Color subTextColor = Color(0xFF757575);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -20,21 +16,21 @@ class MyApp extends StatelessWidget {
       title: 'Koopong',
       theme: ThemeData(
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white,
-        primaryColor: primaryColor,
+        scaffoldBackgroundColor: AppColors.surface,
+        primaryColor: AppColors.primary,
         fontFamily: 'Pretendard',
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: cardColor,
-          selectedItemColor: primaryColor,
-          unselectedItemColor: subTextColor,
+          backgroundColor: AppColors.card,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.textSecondary,
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
         ),
         textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(foregroundColor: subTextColor),
+          style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
         ),
-        iconTheme: const IconThemeData(color: subTextColor),
+        iconTheme: const IconThemeData(color: AppColors.textSecondary),
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
@@ -68,7 +64,6 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16),
                       // Search Bar
                       _buildSearchBar(),
                       const SizedBox(height: 24),
@@ -152,23 +147,19 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.location_on, color: primaryColor, size: 20),
-          const SizedBox(width: 4),
           const Text(
-            '양산시 물금읍',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Pretendard',
-              color: textColor,
-            ),
+            '마장동',
+            style: AppTypography.locationText,
           ),
-          const Icon(Icons.keyboard_arrow_down, size: 24),
+          const Icon(
+            Icons.keyboard_arrow_down,
+            size: 24,
+            color: AppColors.textSecondary,
+          ),
           const Spacer(),
-          TextButton(onPressed: () {}, child: const Text('로그인')),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
+            icon: const Icon(Icons.qr_code),
           ),
         ],
       ),
@@ -179,17 +170,26 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(100),
         border: Border.all(color: Colors.grey[200]!),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.search, color: subTextColor),
-          SizedBox(width: 8),
-          Text(
-            '여기서 업체 검색',
-            style: TextStyle(color: subTextColor, fontSize: 16),
+          const Icon(Icons.search, color: AppColors.textSecondary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: '여기서 업체 검색',
+                hintStyle: AppTypography.searchHint,
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+              ),
+              style: AppTypography.searchHint.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
           ),
         ],
       ),
@@ -199,11 +199,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-        color: textColor,
-      ),
+      style: AppTypography.sectionTitle,
     );
   }
 
@@ -211,7 +207,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey[200]!),
       ),
@@ -233,21 +229,21 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const Text(
                   '모락로제떡볶이',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: AppTypography.h4,
                 ),
                 const SizedBox(height: 6),
                 const Text(
                   '떡볶이 & 닭강정',
-                  style: TextStyle(fontSize: 14, color: subTextColor),
+                  style: AppTypography.cardSubtitle,
                 ),
                 const SizedBox(height: 8),
                 const Row(
                   children: [
-                    Text('❤️', style: TextStyle(fontSize: 12)),
+                    Text('❤️', style: AppTypography.caption),
                     SizedBox(width: 4),
                     Text(
                       '15명 찜 · 걸어서 2분 (150m)',
-                      style: TextStyle(fontSize: 12, color: subTextColor),
+                      style: AppTypography.caption,
                     ),
                   ],
                 ),
@@ -288,29 +284,21 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 12),
           Text(
             stores[index]['tag']!,
-            style: const TextStyle(
-              fontSize: 12,
-              color: primaryColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTypography.tag,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 4),
           Text(
             stores[index]['name']!,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: textColor,
-            ),
+            style: AppTypography.cardTitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 4),
           Text(
             stores[index]['subtitle']!,
-            style: const TextStyle(fontSize: 13, color: subTextColor),
+            style: AppTypography.caption,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -352,28 +340,21 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   stores[index]['name']!,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTypography.cardTitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   stores[index]['subtitle']!,
-                  style: const TextStyle(fontSize: 12, color: subTextColor),
+                  style: AppTypography.caption,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   stores[index]['tag']!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTypography.tag,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -395,7 +376,7 @@ class _HomePageState extends State<HomePage> {
       width: 180, // Added fixed width for horizontal ListView
       margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey[200]!),
       ),
@@ -406,7 +387,7 @@ class _HomePageState extends State<HomePage> {
             width: double.infinity,
             height: 100,
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.1),
+              color: AppColors.primaryWithOpacity(0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
@@ -414,7 +395,7 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Icon(
               Icons.percent,
-              color: primaryColor.withOpacity(0.5),
+              color: AppColors.primaryWithOpacity(0.5),
               size: 50,
             ),
           ),
@@ -425,18 +406,16 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   coupons[index]['name']!,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: AppTypography.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   coupons[index]['discount']!,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
+                  style: AppTypography.bodyLarge.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
