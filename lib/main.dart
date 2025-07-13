@@ -11,7 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Koopong',
-      theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'Pretendard'),
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        fontFamily: 'Pretendard',
+        
+      ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -45,11 +49,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(width: 4),
                   const Text(
                     '양산시 물금읍',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Pretendard',
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const Icon(Icons.keyboard_arrow_down, size: 20),
                   const Spacer(),
@@ -115,7 +115,6 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -140,7 +139,6 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'Pretendard',
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -179,7 +177,6 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -209,7 +206,6 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
