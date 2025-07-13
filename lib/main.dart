@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'themes/colors.dart';
 import 'themes/typography.dart';
+import 'screens/store_detail_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Koopong',
       theme: ThemeData(
         brightness: Brightness.light,
-        scaffoldBackgroundColor: AppColors.surface,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
         primaryColor: AppColors.primary,
         fontFamily: 'Pretendard',
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -24,8 +25,8 @@ class MyApp extends StatelessWidget {
           selectedItemColor: AppColors.primary,
           unselectedItemColor: AppColors.textSecondary,
           type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          selectedLabelStyle: AppTypography.bodySmall,
+          unselectedLabelStyle: AppTypography.bodySmall,
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
@@ -270,7 +271,9 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       '배너 이미지 프리뷰 입니다.',
                       style: TextStyle(
-                        color: (banner['color'] as Color).withValues(alpha: 0.7),
+                        color: (banner['color'] as Color).withValues(
+                          alpha: 0.7,
+                        ),
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
                       ),
@@ -289,49 +292,57 @@ class _HomePageState extends State<HomePage> {
   Widget _buildRecommendationCard() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey[200]!),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: const DecorationImage(
-                  image: AssetImage('assets/tokbokki.jpg'),
-                  fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const StoreDetailPage()),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey[200]!),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/tokbokki.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('모락로제떡볶이', style: AppTypography.h4),
-                  const SizedBox(height: 6),
-                  const Text('떡볶이 & 닭강정', style: AppTypography.cardSubtitle),
-                  const SizedBox(height: 8),
-                  const Row(
-                    children: [
-                      Text('❤️', style: AppTypography.caption),
-                      SizedBox(width: 4),
-                      Text(
-                        '15명 찜 · 걸어서 2분 (150m)',
-                        style: AppTypography.caption,
-                      ),
-                    ],
-                  ),
-                ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('모락로제떡볶이', style: AppTypography.h4),
+                    const SizedBox(height: 6),
+                    const Text('떡볶이 & 닭강정', style: AppTypography.cardSubtitle),
+                    const SizedBox(height: 8),
+                    const Row(
+                      children: [
+                        Text('❤️', style: AppTypography.caption),
+                        SizedBox(width: 4),
+                        Text(
+                          '15명 찜 · 걸어서 2분 (150m)',
+                          style: AppTypography.caption,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -359,46 +370,54 @@ class _HomePageState extends State<HomePage> {
       },
     ];
 
-    return SizedBox(
-      width: 160,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: AssetImage(stores[index]['image'] as String),
-                  fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const StoreDetailPage()),
+        );
+      },
+      child: SizedBox(
+        width: 160,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(stores[index]['image'] as String),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            stores[index]['tag']!,
-            style: AppTypography.tag,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            stores[index]['name']!,
-            style: AppTypography.cardTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            stores[index]['subtitle']!,
-            style: AppTypography.caption,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+            const SizedBox(height: 12),
+            Text(
+              stores[index]['tag']!,
+              style: AppTypography.tag,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              stores[index]['name']!,
+              style: AppTypography.cardTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              stores[index]['subtitle']!,
+              style: AppTypography.caption,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -425,53 +444,61 @@ class _HomePageState extends State<HomePage> {
       },
     ];
 
-    return SizedBox(
-      width: 160, // Added fixed width for horizontal ListView
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: AssetImage(stores[index]['image'] as String),
-                  fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const StoreDetailPage()),
+        );
+      },
+      child: SizedBox(
+        width: 160, // Added fixed width for horizontal ListView
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(stores[index]['image'] as String),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  stores[index]['name']!,
-                  style: AppTypography.cardTitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  stores[index]['subtitle']!,
-                  style: AppTypography.caption,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  stores[index]['tag']!,
-                  style: AppTypography.tag,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    stores[index]['name']!,
+                    style: AppTypography.cardTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    stores[index]['subtitle']!,
+                    style: AppTypography.caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    stores[index]['tag']!,
+                    style: AppTypography.tag,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -51,8 +51,8 @@ class AppTypography {
   );
   
   static const TextStyle bodySmall = TextStyle(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
     fontFamily: fontFamily,
     color: AppColors.textPrimary,
   );
