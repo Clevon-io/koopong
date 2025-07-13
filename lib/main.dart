@@ -109,17 +109,13 @@ class _HomePageState extends State<HomePage> {
           SliverList(
             delegate: SliverChildListDelegate([
               const SizedBox(height: 8),
-              
-              // Banner Section
-              _buildBannerSection(),
-              const SizedBox(height: 24),
-          
+
               // Recommendation Section
               _buildSectionTitle('쿠덕이의 강력 추천'),
               const SizedBox(height: 16),
               _buildRecommendationCard(),
               const SizedBox(height: 24),
-          
+
               // Popular Stores Section
               _buildSectionTitle('우리 동네 인기 가게 🏆'),
               const SizedBox(height: 16),
@@ -136,8 +132,12 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              const SizedBox(height: 24),
-          
+              const SizedBox(height: 16),
+
+              // Banner Section
+              _buildBannerSection(),
+              const SizedBox(height: 16),
+
               // New Stores Section
               _buildSectionTitle('우리 동네 신규 상점'),
               const SizedBox(height: 16),
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 24),
-          
+
               // Coupon Section
               _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
               const SizedBox(height: 16),
@@ -230,18 +230,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBannerSection() {
     final banners = [
-      {
-        'text': '🎉 신규 가입 시 5,000원 할인',
-        'color': AppColors.primary,
-      },
-      {
-        'text': '🍕 오늘의 인기 맛집 TOP 10',
-        'color': const Color(0xFFF5576C),
-      },
-      {
-        'text': '⚡ 지금 주문하면 30분 내 도착',
-        'color': const Color(0xFF4FACFE),
-      },
+      {'text': '🎉 신규 가입 시 5,000원 할인', 'color': AppColors.primary},
+      {'text': '🍕 오늘의 인기 맛집 TOP 10', 'color': const Color(0xFFF5576C)},
+      {'text': '⚡ 지금 주문하면 30분 내 도착', 'color': const Color(0xFF4FACFE)},
     ];
 
     return SizedBox(
@@ -263,14 +254,29 @@ class _HomePageState extends State<HomePage> {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  banner['text'] as String,
-                  style: TextStyle(
-                    color: banner['color'] as Color,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      banner['text'] as String,
+                      style: TextStyle(
+                        color: banner['color'] as Color,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '배너 이미지 프리뷰 입니다.',
+                      style: TextStyle(
+                        color: (banner['color'] as Color).withValues(alpha: 0.7),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -316,7 +322,10 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text('❤️', style: AppTypography.caption),
                       SizedBox(width: 4),
-                      Text('15명 찜 · 걸어서 2분 (150m)', style: AppTypography.caption),
+                      Text(
+                        '15명 찜 · 걸어서 2분 (150m)',
+                        style: AppTypography.caption,
+                      ),
                     ],
                   ),
                 ],
@@ -330,9 +339,24 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildPopularStoreCard(int index) {
     final stores = [
-      {'name': '감성커피 양산점', 'subtitle': '이번 주 찜 30+회', 'tag': '👍 친절해요', 'image': 'assets/coffeeshop_1.jpg'},
-      {'name': '탕화쿵푸마라탕', 'subtitle': '후기 만족도 95%', 'tag': '🔥 맛집인증', 'image': 'assets/maratang.jpg'},
-      {'name': '페이지10', 'subtitle': '이번 주 리뷰 50+', 'tag': '✨ 분위기 깡패', 'image': 'assets/coffeeshop_2.jpg'},
+      {
+        'name': '감성커피 양산점',
+        'subtitle': '이번 주 찜 30+회',
+        'tag': '👍 친절해요',
+        'image': 'assets/coffeeshop_1.jpg',
+      },
+      {
+        'name': '탕화쿵푸마라탕',
+        'subtitle': '후기 만족도 95%',
+        'tag': '🔥 맛집인증',
+        'image': 'assets/maratang.jpg',
+      },
+      {
+        'name': '페이지10',
+        'subtitle': '이번 주 리뷰 50+',
+        'tag': '✨ 분위기 깡패',
+        'image': 'assets/coffeeshop_2.jpg',
+      },
     ];
 
     return SizedBox(
@@ -381,9 +405,24 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildNewStoreCard(int index) {
     final stores = [
-      {'name': '모락 떡볶이', 'subtitle': '떡볶이 & 닭강정', 'tag': '모든 메뉴 10% 할인', 'image': 'assets/tokbokki.jpg'},
-      {'name': '모락모락 김밥', 'subtitle': '김밥 전문점', 'tag': '음료수 서비스', 'image': 'assets/kimbob.jpg'},
-      {'name': '모락 카페', 'subtitle': '디저트 카페', 'tag': '아메리카노 1+1', 'image': 'assets/coffeeshop_3.jpg'},
+      {
+        'name': '모락 떡볶이',
+        'subtitle': '떡볶이 & 닭강정',
+        'tag': '모든 메뉴 10% 할인',
+        'image': 'assets/tokbokki.jpg',
+      },
+      {
+        'name': '모락모락 김밥',
+        'subtitle': '김밥 전문점',
+        'tag': '음료수 서비스',
+        'image': 'assets/kimbob.jpg',
+      },
+      {
+        'name': '모락 카페',
+        'subtitle': '디저트 카페',
+        'tag': '아메리카노 1+1',
+        'image': 'assets/coffeeshop_3.jpg',
+      },
     ];
 
     return SizedBox(
@@ -439,8 +478,16 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCouponCard(int index) {
     final coupons = [
-      {'name': '모락 닭강정', 'discount': '모든 메뉴 20% 할인', 'image': 'assets/gangaung.jpg'},
-      {'name': '모락 피자', 'discount': '포장 5,000원 할인', 'image': 'assets/pizza.jpg'},
+      {
+        'name': '모락 닭강정',
+        'discount': '모든 메뉴 20% 할인',
+        'image': 'assets/gangaung.jpg',
+      },
+      {
+        'name': '모락 피자',
+        'discount': '포장 5,000원 할인',
+        'image': 'assets/pizza.jpg',
+      },
     ];
 
     return Container(
@@ -467,7 +514,7 @@ class _HomePageState extends State<HomePage> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Container()
+              child: Container(),
             ),
           ),
           Padding(
@@ -506,19 +553,16 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      height: 60,
+      height: 55,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Colors.white.withValues(alpha: 0.0),
-          ],
+          colors: [Colors.white, Colors.white.withValues(alpha: 0.0)],
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.card,
@@ -553,10 +597,10 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 60.0;
+  double get maxExtent => 55.0;
 
   @override
-  double get minExtent => 60.0;
+  double get minExtent => 55.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
