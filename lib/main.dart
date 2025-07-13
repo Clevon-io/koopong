@@ -74,13 +74,13 @@ class _HomePageState extends State<HomePage> {
             surfaceTintColor: AppColors.surface,
             elevation: 0,
             pinned: false,
-            floating: true,
+            floating: false,
           ),
+          SliverPersistentHeader(pinned: true, delegate: _SearchBarDelegate()),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _buildSearchBarWidget(),
                 const SizedBox(height: 8),
 
                 // Recommendation Section
@@ -155,36 +155,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: '스탬프'),
           BottomNavigationBarItem(icon: Icon(Icons.local_offer), label: '내 쿠폰'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBarWidget() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.search, color: AppColors.textSecondary),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: '여기서 업체 검색',
-                hintStyle: AppTypography.searchHint,
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-              ),
-              style: AppTypography.searchHint.copyWith(
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -392,7 +362,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   coupons[index]['name']!,
                   style: AppTypography.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -410,4 +380,69 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      height: 65,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white,
+            Colors.white.withValues(alpha: 0.0),
+          ],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: Colors.grey[200]!),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                const Icon(Icons.search, color: AppColors.textSecondary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: '여기서 업체 검색',
+                      hintStyle: AppTypography.searchHint,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    style: AppTypography.searchHint.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 65.0;
+
+  @override
+  double get minExtent => 65.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }
