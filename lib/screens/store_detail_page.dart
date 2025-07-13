@@ -59,41 +59,39 @@ class StoreDetailPage extends StatelessWidget {
                   ),
                   // YouTube badge
                   Positioned(
-                    bottom: 20,
-                    left: 16,
-                    right: 16,
+                    bottom: 16,
+                    right: 12,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
+                        horizontal: 10,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(24),
+                        color: Colors.black.withValues(alpha: 0.75),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 20,
-                            height: 20,
+                            width: 14,
+                            height: 10,
                             decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(3),
                             ),
                             child: const Icon(
                               Icons.play_arrow,
-                              color: Colors.white,
-                              size: 14,
+                              color: Colors.black,
+                              size: 10,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           const Text(
                             '쿠덕이가 찾아간 가게',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 11,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
