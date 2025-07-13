@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'themes/colors.dart';
 import 'themes/typography.dart';
 
@@ -46,6 +47,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final PageController _bannerController = PageController();
+  Timer? _bannerTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startBannerTimer();
+  }
+
+  @override
+  void dispose() {
+    _bannerTimer?.cancel();
+    _bannerController.dispose();
+    super.dispose();
+  }
+
+  void _startBannerTimer() {
+    _bannerTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_bannerController.hasClients) {
+        final nextPage = (_bannerController.page?.round() ?? 0) + 1;
+        _bannerController.animateToPage(
+          nextPage % 3, // Loop back to first banner after the last one
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,70 +106,71 @@ class _HomePageState extends State<HomePage> {
             floating: false,
           ),
           SliverPersistentHeader(pinned: true, delegate: _SearchBarDelegate()),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                const SizedBox(height: 8),
-
-                // Recommendation Section
-                _buildSectionTitle('쿠덕이의 강력 추천'),
-                const SizedBox(height: 16),
-                _buildRecommendationCard(),
-                const SizedBox(height: 24),
-
-                // Popular Stores Section
-                _buildSectionTitle('우리 동네 인기 가게 🏆'),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 250,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 12),
-                    itemBuilder: (context, index) {
-                      return _buildPopularStoreCard(index);
-                    },
-                  ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const SizedBox(height: 8),
+              
+              // Banner Section
+              _buildBannerSection(),
+              const SizedBox(height: 24),
+          
+              // Recommendation Section
+              _buildSectionTitle('쿠덕이의 강력 추천'),
+              const SizedBox(height: 16),
+              _buildRecommendationCard(),
+              const SizedBox(height: 24),
+          
+              // Popular Stores Section
+              _buildSectionTitle('우리 동네 인기 가게 🏆'),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 250,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    return _buildPopularStoreCard(index);
+                  },
                 ),
-                const SizedBox(height: 24),
-
-                // New Stores Section
-                _buildSectionTitle('우리 동네 신규 상점 (new)'),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 250,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 12),
-                    itemBuilder: (context, index) {
-                      return _buildNewStoreCard(index);
-                    },
-                  ),
+              ),
+              const SizedBox(height: 24),
+          
+              // New Stores Section
+              _buildSectionTitle('우리 동네 신규 상점 (new)'),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 250,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    return _buildNewStoreCard(index);
+                  },
                 ),
-                const SizedBox(height: 24),
-
-                // Coupon Section
-                _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 2,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 12),
-                    itemBuilder: (context, index) {
-                      return _buildCouponCard(index);
-                    },
-                  ),
+              ),
+              const SizedBox(height: 24),
+          
+              // Coupon Section
+              _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 200,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 2,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    return _buildCouponCard(index);
+                  },
                 ),
-                const SizedBox(height: 80), // Space for bottom navigation
-              ]),
-            ),
+              ),
+              const SizedBox(height: 80), // Space for bottom navigation
+            ]),
           ),
         ],
       ),
@@ -162,6 +192,58 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSectionTitle(String title) {
     return Text(title, style: AppTypography.sectionTitle);
+  }
+
+  Widget _buildBannerSection() {
+    final banners = [
+      {
+        'text': '🎉 신규 가입 시 5,000원 할인',
+        'color': AppColors.primary,
+      },
+      {
+        'text': '🍕 오늘의 인기 맛집 TOP 10',
+        'color': const Color(0xFFF5576C),
+      },
+      {
+        'text': '⚡ 지금 주문하면 30분 내 도착',
+        'color': const Color(0xFF4FACFE),
+      },
+    ];
+
+    return SizedBox(
+      height: 80,
+      child: PageView.builder(
+        controller: _bannerController,
+        itemCount: banners.length,
+        itemBuilder: (context, index) {
+          final banner = banners[index];
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: (banner['color'] as Color).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: (banner['color'] as Color).withValues(alpha: 0.2),
+              ),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  banner['text'] as String,
+                  style: TextStyle(
+                    color: banner['color'] as Color,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildRecommendationCard() {
@@ -390,7 +472,7 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-      height: 65,
+      height: 60,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -402,7 +484,7 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.card,
@@ -418,7 +500,7 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: '여기서 업체 검색',
+                      hintText: '검색...',
                       hintStyle: AppTypography.searchHint,
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
@@ -437,10 +519,10 @@ class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 65.0;
+  double get maxExtent => 60.0;
 
   @override
-  double get minExtent => 65.0;
+  double get minExtent => 60.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
