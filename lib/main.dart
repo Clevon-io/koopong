@@ -4,6 +4,13 @@ void main() {
   runApp(const MyApp());
 }
 
+// New Color Palette for Light Theme
+const Color lightBgColor = Color(0xFFF9F9F9);
+const Color cardColor = Colors.white;
+const Color primaryColor = Color.fromARGB(255, 222, 168, 6);
+const Color textColor = Color(0xFF121212);
+const Color subTextColor = Color(0xFF757575);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -11,7 +18,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Koopong',
-      theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'Pretendard'),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        primaryColor: primaryColor,
+        fontFamily: 'Pretendard',
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: cardColor,
+          selectedItemColor: primaryColor,
+          unselectedItemColor: subTextColor,
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: subTextColor),
+        ),
+        iconTheme: const IconThemeData(color: subTextColor),
+      ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -31,192 +55,76 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Column(
           children: [
             // Header Section
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.white,
-              child: Row(
-                children: [
-                  const Icon(Icons.location_on, color: Colors.orange, size: 20),
-                  const SizedBox(width: 4),
-                  const Text(
-                    '양산시 물금읍',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  const Icon(Icons.keyboard_arrow_down, size: 20),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '로그인',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.menu, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
+            _buildHeader(),
             // Main Content
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Search Bar
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      color: Colors.white,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      // Search Bar
+                      _buildSearchBar(),
+                      const SizedBox(height: 24),
+
+                      // Recommendation Section
+                      _buildSectionTitle('쿠덕이의 강력 추천'),
+                      const SizedBox(height: 16),
+                      _buildRecommendationCard(),
+                      const SizedBox(height: 24),
+
+                      // Popular Stores Section
+                      _buildSectionTitle('우리 동네 인기 가게 🏆'),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 220,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return _buildPopularStoreCard(index);
+                          },
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.search, color: Colors.grey),
-                            SizedBox(width: 8),
-                            Text(
-                              '여기서 업체 검색',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+                      ),
+                      const SizedBox(height: 24),
+
+                      // New Stores Section
+                      _buildSectionTitle('우리 동네 신규 상점 (new)'),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return _buildNewStoreCard(index);
+                          },
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 24),
 
-                    // Recommendation Section
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '쿠덕이의 강력 추천',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          _buildRecommendationCard(),
-                        ],
+                      // Coupon Section
+                      _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 200, // Adjusted height for the new card layout
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 2,
+                          itemBuilder: (context, index) {
+                            return _buildCouponCard(index);
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Popular Stores Section
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '우리 동네 인기 가게',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Text('⏳', style: TextStyle(fontSize: 18)),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 200,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return _buildPopularStoreCard(index);
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // New Stores Section
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '우리 동네 신규 상점 (new)',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: _buildNewStoreCard(0)),
-                              const SizedBox(width: 12),
-                              Expanded(child: _buildNewStoreCard(1)),
-                              const SizedBox(width: 12),
-                              Expanded(child: _buildNewStoreCard(2)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Coupon Section
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '대박 쿠폰 time 긴급 한정',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: _buildCouponCard(0)),
-                              const SizedBox(width: 12),
-                              Expanded(child: _buildCouponCard(1)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 80), // Space for bottom navigation
-                  ],
+                      const SizedBox(height: 80), // Space for bottom navigation
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -231,7 +139,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: '스탬프'),
           BottomNavigationBarItem(icon: Icon(Icons.local_offer), label: '내 쿠폰'),
         ],
@@ -239,20 +147,73 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRecommendationCard() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          const Icon(Icons.location_on, color: primaryColor, size: 20),
+          const SizedBox(width: 4),
+          const Text(
+            '양산시 물금읍',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Pretendard',
+              color: textColor,
+            ),
+          ),
+          const Icon(Icons.keyboard_arrow_down, size: 24),
+          const Spacer(),
+          TextButton(onPressed: () {}, child: const Text('로그인')),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_none),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.search, color: subTextColor),
+          SizedBox(width: 8),
+          Text(
+            '여기서 업체 검색',
+            style: TextStyle(color: subTextColor, fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      ),
+    );
+  }
+
+  Widget _buildRecommendationCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey[200]!),
       ),
       child: Row(
         children: [
@@ -260,40 +221,33 @@ class _HomePageState extends State<HomePage> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.image, color: Colors.grey),
+            child: Icon(Icons.image, color: Colors.grey[400], size: 40),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '모락로제뜨뷰이',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  '모락로제떡볶이',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 const Text(
-                  '떡볶이 & 타강정',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  '떡볶이 & 닭강정',
+                  style: TextStyle(fontSize: 14, color: subTextColor),
                 ),
                 const SizedBox(height: 8),
-                Row(
+                const Row(
                   children: [
-                    const Text('❤️', style: TextStyle(fontSize: 12)),
-                    const SizedBox(width: 4),
-                    const Text(
-                      '15명 정',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('•', style: TextStyle(color: Colors.grey)),
-                    const SizedBox(width: 8),
-                    const Text(
-                      '걸어서 2분 (150m)',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    Text('❤️', style: TextStyle(fontSize: 12)),
+                    SizedBox(width: 4),
+                    Text(
+                      '15명 찜 · 걸어서 2분 (150m)',
+                      style: TextStyle(fontSize: 12, color: subTextColor),
                     ),
                   ],
                 ),
@@ -307,105 +261,58 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildPopularStoreCard(int index) {
     final stores = [
-      {
-        'name': '감성커피 양산점',
-        'subtitle': '이번 주 첫 30+회',
-        'tag': '진짜해요',
-        'tagColor': Colors.yellow,
-      },
-      {
-        'name': '탕화쿵푸마라탕',
-        'subtitle': '후기 만족도 95%',
-        'tag': '맛집 인정',
-        'tagColor': Colors.orange,
-      },
-      {
-        'name': '페이지10',
-        'subtitle': '이번 주 리뷰 *',
-        'tag': '분위기 갓',
-        'tagColor': Colors.blue,
-      },
+      {'name': '감성커피 양산점', 'subtitle': '이번 주 찜 30+회', 'tag': '👍 친절해요'},
+      {'name': '탕화쿵푸마라탕', 'subtitle': '후기 만족도 95%', 'tag': '🔥 맛집인증'},
+      {'name': '페이지10', 'subtitle': '이번 주 리뷰 50+', 'tag': '✨ 분위기 깡패'},
     ];
 
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                ),
-                child: const Icon(Icons.image, color: Colors.grey),
-              ),
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: stores[index]['tagColor'] as Color,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    stores[index]['tag'] as String,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  stores[index]['name'] as String,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  stores[index]['subtitle'] as String,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+          Container(
+            width: double.infinity,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(16),
             ),
+            child: Icon(
+              Icons.image_outlined,
+              color: Colors.grey[400],
+              size: 50,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            stores[index]['tag']!,
+            style: const TextStyle(
+              fontSize: 12,
+              color: primaryColor,
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            stores[index]['name']!,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: textColor,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            stores[index]['subtitle']!,
+            style: const TextStyle(fontSize: 13, color: subTextColor),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -414,93 +321,61 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildNewStoreCard(int index) {
     final stores = [
-      {
-        'name': '모락 떡볶이',
-        'subtitle': '떡볶이 & 타강정',
-        'tag': '모든 메뉴 10% 할인',
-        'tagColor': Colors.orange,
-      },
-      {
-        'name': '모락모락 김밥',
-        'subtitle': '김밥 전문점',
-        'tag': '출장 서비스',
-        'tagColor': Colors.green,
-      },
-      {
-        'name': '모락 카페',
-        'subtitle': '디저트 카페',
-        'tag': '아메리카노 1+1',
-        'tagColor': Colors.blue,
-      },
+      {'name': '모락 떡볶이', 'subtitle': '떡볶이 & 닭강정', 'tag': '모든 메뉴 10% 할인'},
+      {'name': '모락모락 김밥', 'subtitle': '김밥 전문점', 'tag': '음료수 서비스'},
+      {'name': '모락 카페', 'subtitle': '디저트 카페', 'tag': '아메리카노 1+1'},
     ];
 
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
+      width: 130, // Added fixed width for horizontal ListView
+      margin: const EdgeInsets.only(right: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: double.infinity,
-            height: 80,
+            height: 110,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.image, color: Colors.grey),
+            child: Icon(
+              Icons.image_outlined,
+              color: Colors.grey[400],
+              size: 40,
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  stores[index]['name'] as String,
+                  stores[index]['name']!,
                   style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  stores[index]['subtitle'] as String,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  stores[index]['subtitle']!,
+                  style: const TextStyle(fontSize: 12, color: subTextColor),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
+                const SizedBox(height: 6),
+                Text(
+                  stores[index]['tag']!,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500,
                   ),
-                  decoration: BoxDecoration(
-                    color: stores[index]['tagColor'] as Color,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    stores[index]['tag'] as String,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -517,42 +392,54 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      width: 180, // Added fixed width for horizontal ListView
+      margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: double.infinity,
-            height: 80,
+            height: 100,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
+              color: primaryColor.withOpacity(0.1),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
             ),
-            child: const Icon(Icons.image, color: Colors.grey),
+            child: Icon(
+              Icons.percent,
+              color: primaryColor.withOpacity(0.5),
+              size: 50,
+            ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            coupons[index]['name'] as String,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            coupons[index]['discount'] as String,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.orange,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  coupons[index]['name']!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  coupons[index]['discount']!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: primaryColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
