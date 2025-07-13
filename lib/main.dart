@@ -45,7 +45,11 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(width: 4),
                   const Text(
                     '양산시 물금읍',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
                   const Icon(Icons.keyboard_arrow_down, size: 20),
                   const Spacer(),
@@ -110,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                             '쿠덕이의 강력 추천',
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -134,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                                   '우리 동네 인기 가게',
                                   style: TextStyle(
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Pretendard',
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -172,7 +178,8 @@ class _HomePageState extends State<HomePage> {
                             '우리 동네 신규 상점 (new)',
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -201,7 +208,8 @@ class _HomePageState extends State<HomePage> {
                             '대박 쿠폰 time 긴급 한정',
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Pretendard',
                             ),
                           ),
                           const SizedBox(height: 12),
