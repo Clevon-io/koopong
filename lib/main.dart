@@ -11,11 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Koopong',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        fontFamily: 'Pretendard',
-        
-      ),
+      theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'Pretendard'),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
