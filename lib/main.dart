@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         final nextPage = (_bannerController.page?.round() ?? 0) + 1;
         _bannerController.animateToPage(
           nextPage % 3, // Loop back to first banner after the last one
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -127,6 +127,7 @@ class _HomePageState extends State<HomePage> {
                 height: 250,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: 3,
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 12),
@@ -138,12 +139,13 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 24),
           
               // New Stores Section
-              _buildSectionTitle('우리 동네 신규 상점 (new)'),
+              _buildSectionTitle('우리 동네 신규 상점'),
               const SizedBox(height: 16),
               SizedBox(
                 height: 250,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: 3,
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 12),
@@ -161,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: 2,
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 12),
@@ -191,7 +194,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(title, style: AppTypography.sectionTitle);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: AppTypography.sectionTitle),
+          GestureDetector(
+            onTap: () {
+              // Navigate to view all page
+            },
+            child: Row(
+              children: [
+                Text(
+                  '전체 보기',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 12,
+                  color: AppColors.textSecondary,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBannerSection() {
@@ -218,7 +252,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final banner = banners[index];
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: (banner['color'] as Color).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
@@ -247,53 +281,58 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRecommendationCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(Icons.image, color: Colors.grey[400], size: 40),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('모락로제떡볶이', style: AppTypography.h4),
-                const SizedBox(height: 6),
-                const Text('떡볶이 & 닭강정', style: AppTypography.cardSubtitle),
-                const SizedBox(height: 8),
-                const Row(
-                  children: [
-                    Text('❤️', style: AppTypography.caption),
-                    SizedBox(width: 4),
-                    Text('15명 찜 · 걸어서 2분 (150m)', style: AppTypography.caption),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey[200]!),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: const DecorationImage(
+                  image: AssetImage('assets/tokbokki.jpg'),
+                  fit: BoxFit.cover,
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('모락로제떡볶이', style: AppTypography.h4),
+                  const SizedBox(height: 6),
+                  const Text('떡볶이 & 닭강정', style: AppTypography.cardSubtitle),
+                  const SizedBox(height: 8),
+                  const Row(
+                    children: [
+                      Text('❤️', style: AppTypography.caption),
+                      SizedBox(width: 4),
+                      Text('15명 찜 · 걸어서 2분 (150m)', style: AppTypography.caption),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildPopularStoreCard(int index) {
     final stores = [
-      {'name': '감성커피 양산점', 'subtitle': '이번 주 찜 30+회', 'tag': '👍 친절해요'},
-      {'name': '탕화쿵푸마라탕', 'subtitle': '후기 만족도 95%', 'tag': '🔥 맛집인증'},
-      {'name': '페이지10', 'subtitle': '이번 주 리뷰 50+', 'tag': '✨ 분위기 깡패'},
+      {'name': '감성커피 양산점', 'subtitle': '이번 주 찜 30+회', 'tag': '👍 친절해요', 'image': 'assets/coffeeshop_1.jpg'},
+      {'name': '탕화쿵푸마라탕', 'subtitle': '후기 만족도 95%', 'tag': '🔥 맛집인증', 'image': 'assets/maratang.jpg'},
+      {'name': '페이지10', 'subtitle': '이번 주 리뷰 50+', 'tag': '✨ 분위기 깡패', 'image': 'assets/coffeeshop_2.jpg'},
     ];
 
     return SizedBox(
@@ -306,13 +345,11 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                Icons.image_outlined,
-                color: Colors.grey[400],
-                size: 50,
+                image: DecorationImage(
+                  image: AssetImage(stores[index]['image'] as String),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -344,9 +381,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildNewStoreCard(int index) {
     final stores = [
-      {'name': '모락 떡볶이', 'subtitle': '떡볶이 & 닭강정', 'tag': '모든 메뉴 10% 할인'},
-      {'name': '모락모락 김밥', 'subtitle': '김밥 전문점', 'tag': '음료수 서비스'},
-      {'name': '모락 카페', 'subtitle': '디저트 카페', 'tag': '아메리카노 1+1'},
+      {'name': '모락 떡볶이', 'subtitle': '떡볶이 & 닭강정', 'tag': '모든 메뉴 10% 할인', 'image': 'assets/tokbokki.jpg'},
+      {'name': '모락모락 김밥', 'subtitle': '김밥 전문점', 'tag': '음료수 서비스', 'image': 'assets/kimbob.jpg'},
+      {'name': '모락 카페', 'subtitle': '디저트 카페', 'tag': '아메리카노 1+1', 'image': 'assets/coffeeshop_3.jpg'},
     ];
 
     return SizedBox(
@@ -359,13 +396,11 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                Icons.image_outlined,
-                color: Colors.grey[400],
-                size: 40,
+                image: DecorationImage(
+                  image: AssetImage(stores[index]['image'] as String),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -404,8 +439,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCouponCard(int index) {
     final coupons = [
-      {'name': '모락 닭강정', 'discount': '모든 메뉴 20% 할인'},
-      {'name': '모락 피자', 'discount': '포장 5,000원 할인'},
+      {'name': '모락 닭강정', 'discount': '모든 메뉴 20% 할인', 'image': 'assets/gangaung.jpg'},
+      {'name': '모락 피자', 'discount': '포장 5,000원 할인', 'image': 'assets/pizza.jpg'},
     ];
 
     return Container(
@@ -423,17 +458,16 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.primaryWithOpacity(0.1),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
                 ),
+                image: DecorationImage(
+                  image: AssetImage(coupons[index]['image'] as String),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Icon(
-                Icons.percent,
-                color: AppColors.primaryWithOpacity(0.5),
-                size: 50,
-              ),
+              child: Container()
             ),
           ),
           Padding(
