@@ -4,6 +4,7 @@ import 'themes/colors.dart';
 import 'themes/typography.dart';
 import 'screens/store_detail_page.dart';
 import 'screens/my_coupons_page.dart';
+import 'screens/my_kupon_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -89,10 +90,12 @@ class _HomePageState extends State<HomePage> {
             _selectedIndex = index;
           });
         },
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: '스탬프'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_offer), label: '내 쿠폰'),
+          BottomNavigationBarItem(icon: Icon(Icons.verified), label: '스탬프'),
+          BottomNavigationBarItem(icon: Icon(Icons.local_play_rounded), label: '내 쿠폰'),
+          BottomNavigationBarItem(icon: Icon(Icons.mood), label: 'MY 쿠퐁'),
         ],
       ),
     );
@@ -106,6 +109,8 @@ class _HomePageState extends State<HomePage> {
         return _buildStampPage();
       case 2:
         return const MyCouponsPage();
+      case 3:
+        return const MyKuponPage();
       default:
         return _buildHomePage();
     }
