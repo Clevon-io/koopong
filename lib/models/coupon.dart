@@ -42,6 +42,9 @@ class Coupon {
   }
 
   String get formattedExpiryDate {
-    return '${expiryDate.year}.${expiryDate.month.toString().padLeft(2, '0')}.${expiryDate.day.toString().padLeft(2, '0')}까지';
+    if (isExpiringToday) {
+      return '유효기한: 오늘까지!';
+    }
+    return '유효기한: ~ ${expiryDate.year}.${expiryDate.month.toString().padLeft(2, '0')}.${expiryDate.day.toString().padLeft(2, '0')}까지';
   }
 }

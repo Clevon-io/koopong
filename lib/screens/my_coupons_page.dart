@@ -87,39 +87,56 @@ class _MyCouponsPageState extends State<MyCouponsPage>
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
-          '내 쿠폰함',
-          style: AppTypography.h3,
+          '🎟️ 내 쿠폰함',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pretendard',
+            color: AppColors.textPrimary,
+          ),
         ),
         backgroundColor: AppColors.surface,
         elevation: 0,
         surfaceTintColor: AppColors.surface,
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Container(
-            color: AppColors.surface,
-            child: TabBar(
-              controller: _tabController,
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.textSecondary,
-              indicatorColor: AppColors.primary,
-              indicatorWeight: 2,
-              labelStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Pretendard',
+          preferredSize: const Size.fromHeight(62),
+          child: Column(
+            children: [
+              Container(
+                height: 1,
+                color: AppColors.divider,
               ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Pretendard',
+              Container(
+                color: AppColors.surface,
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: AppColors.primary,
+                  unselectedLabelColor: AppColors.textSecondary,
+                  indicatorColor: AppColors.primary,
+                  indicatorWeight: 2,
+                  labelStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard',
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Pretendard',
+                  ),
+                  tabs: [
+                    Tab(text: '사용 가능${_getCountText(_availableCoupons.length)}'),
+                    Tab(text: '사용 완료${_getCountText(_usedCoupons.length)}'),
+                    Tab(text: '기간 만료${_getCountText(_expiredCoupons.length)}'),
+                  ],
+                ),
               ),
-              tabs: [
-                Tab(text: '사용 가능${_getCountText(_availableCoupons.length)}'),
-                Tab(text: '사용 완료${_getCountText(_usedCoupons.length)}'),
-                Tab(text: '기간 만료${_getCountText(_expiredCoupons.length)}'),
-              ],
-            ),
+              Container(
+                height: 1,
+                color: AppColors.divider,
+              ),
+            ],
           ),
         ),
       ),

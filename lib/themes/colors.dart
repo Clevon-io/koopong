@@ -11,6 +11,10 @@ class AppColors {
   static const Color urgent = Color(0xFFE74C3C);
   static const Color urgentLight = Color(0xFFFFEBEE);
 
+  // Disabled colors (for used/expired coupons)
+  static const Color disabled = Color(0xFF9E9E9E);
+  static const Color disabledLight = Color(0xFFF5F5F5);
+
   // Background colors
   static const Color background = Color(0xFFF9F9F9);
   static const Color surface = Colors.white;
