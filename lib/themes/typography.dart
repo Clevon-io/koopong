@@ -82,7 +82,7 @@ class AppTypography {
   // Specialized styles for the app
   static const TextStyle sectionTitle = TextStyle(
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.bold,
     fontFamily: fontFamily,
     color: AppColors.textPrimary,
   );
@@ -117,7 +117,7 @@ class AppTypography {
   
   static const TextStyle locationText = TextStyle(
     fontSize: 20,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.bold,
     fontFamily: fontFamily,
     color: AppColors.textPrimary,
   );

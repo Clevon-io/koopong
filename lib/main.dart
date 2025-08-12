@@ -122,6 +122,12 @@ class _HomePageState extends State<HomePage> {
         SliverAppBar(
           title: Row(
             children: [
+              const Icon(
+                Icons.place,
+                size: 20,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 6),
               const Text('마장동', style: AppTypography.locationText),
               const Icon(
                 Icons.keyboard_arrow_down,
