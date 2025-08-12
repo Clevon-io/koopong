@@ -3,6 +3,7 @@ import 'dart:async';
 import 'themes/colors.dart';
 import 'themes/typography.dart';
 import 'screens/store_detail_page.dart';
+import 'screens/my_coupons_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,104 +81,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Row(
-              children: [
-                const Text('마장동', style: AppTypography.locationText),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 24,
-                  color: AppColors.textSecondary,
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.qr_code),
-                  color: AppColors.textSecondary,
-                ),
-              ],
-            ),
-            foregroundColor: AppColors.surface,
-            backgroundColor: AppColors.surface,
-            surfaceTintColor: AppColors.surface,
-            elevation: 0,
-            pinned: false,
-            floating: false,
-          ),
-          SliverPersistentHeader(pinned: true, delegate: _SearchBarDelegate()),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              const SizedBox(height: 8),
-
-              // Recommendation Section
-              _buildSectionTitle('쿠덕이의 강력 추천'),
-              const SizedBox(height: 16),
-              _buildRecommendationCard(),
-              const SizedBox(height: 24),
-
-              // Popular Stores Section
-              _buildSectionTitle('우리 동네 인기 가게 🏆'),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 250,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: 3,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    return _buildPopularStoreCard(index);
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Banner Section
-              _buildBannerSection(),
-              const SizedBox(height: 16),
-
-              // New Stores Section
-              _buildSectionTitle('우리 동네 신규 상점'),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 250,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: 3,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    return _buildNewStoreCard(index);
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Coupon Section
-              _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 200,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: 2,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    return _buildCouponCard(index);
-                  },
-                ),
-              ),
-              const SizedBox(height: 80), // Space for bottom navigation
-            ]),
-          ),
-        ],
-      ),
+      body: _getSelectedPage(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -189,6 +93,149 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: '스탬프'),
           BottomNavigationBarItem(icon: Icon(Icons.local_offer), label: '내 쿠폰'),
+        ],
+      ),
+    );
+  }
+
+  Widget _getSelectedPage() {
+    switch (_selectedIndex) {
+      case 0:
+        return _buildHomePage();
+      case 1:
+        return _buildStampPage();
+      case 2:
+        return const MyCouponsPage();
+      default:
+        return _buildHomePage();
+    }
+  }
+
+  Widget _buildHomePage() {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: Row(
+            children: [
+              const Text('마장동', style: AppTypography.locationText),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 24,
+                color: AppColors.textSecondary,
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.qr_code),
+                color: AppColors.textSecondary,
+              ),
+            ],
+          ),
+          foregroundColor: AppColors.surface,
+          backgroundColor: AppColors.surface,
+          surfaceTintColor: AppColors.surface,
+          elevation: 0,
+          pinned: false,
+          floating: false,
+        ),
+        SliverPersistentHeader(pinned: true, delegate: _SearchBarDelegate()),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            const SizedBox(height: 8),
+
+            // Recommendation Section
+            _buildSectionTitle('쿠덕이의 강력 추천'),
+            const SizedBox(height: 16),
+            _buildRecommendationCard(),
+            const SizedBox(height: 24),
+
+            // Popular Stores Section
+            _buildSectionTitle('우리 동네 인기 가게 🏆'),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 250,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: 3,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  return _buildPopularStoreCard(index);
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Banner Section
+            _buildBannerSection(),
+            const SizedBox(height: 16),
+
+            // New Stores Section
+            _buildSectionTitle('우리 동네 신규 상점'),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 250,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: 3,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  return _buildNewStoreCard(index);
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Coupon Section
+            _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 200,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: 2,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  return _buildCouponCard(index);
+                },
+              ),
+            ),
+            const SizedBox(height: 80), // Space for bottom navigation
+          ]),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStampPage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.credit_card,
+            size: 64,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '스탬프 기능',
+            style: AppTypography.h3.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '준비 중입니다',
+            style: AppTypography.bodyLarge.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );

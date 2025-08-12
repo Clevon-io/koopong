@@ -7,6 +7,10 @@ class AppColors {
   static const Color primary = Color.fromARGB(255, 249, 189, 9);
   static const Color primaryLight = Color(0xFFFFF3CD);
 
+  // Urgent/Warning colors (for expiring coupons)
+  static const Color urgent = Color(0xFFE74C3C);
+  static const Color urgentLight = Color(0xFFFFEBEE);
+
   // Background colors
   static const Color background = Color(0xFFF9F9F9);
   static const Color surface = Colors.white;
