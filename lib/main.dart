@@ -5,6 +5,7 @@ import 'themes/typography.dart';
 import 'screens/store_detail_page.dart';
 import 'screens/my_coupons_page.dart';
 import 'screens/my_kupon_page.dart';
+import 'screens/my_stamps_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomePage();
       case 1:
-        return _buildStampPage();
+        return const MyStampsPage();
       case 2:
         return const MyCouponsPage();
       case 3:
@@ -220,35 +221,6 @@ class _HomePageState extends State<HomePage> {
           ]),
         ),
       ],
-    );
-  }
-
-  Widget _buildStampPage() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.credit_card,
-            size: 64,
-            color: AppColors.textSecondary,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            '스탬프 기능',
-            style: AppTypography.h3.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '준비 중입니다',
-            style: AppTypography.bodyLarge.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
