@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import '../themes/colors.dart';
 import '../themes/typography.dart';
 
-class StoreDetailPage extends StatelessWidget {
+class StoreDetailPage extends StatefulWidget {
   const StoreDetailPage({super.key});
+
+  @override
+  State<StoreDetailPage> createState() => _StoreDetailPageState();
+}
+
+class _StoreDetailPageState extends State<StoreDetailPage> {
+  bool _isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +38,16 @@ class StoreDetailPage extends StatelessWidget {
                 onPressed: () {},
               ),
               IconButton(
-                icon: const Icon(Icons.favorite_border, color: Colors.white),
-                onPressed: () {},
+                icon: Icon(
+                  _isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: _isFavorite ? Colors.red : Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isFavorite = !_isFavorite;
+                  });
+                  _showFavoriteMessage();
+                },
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -148,7 +163,7 @@ class StoreDetailPage extends StatelessWidget {
                         const Icon(Icons.star, color: Colors.amber, size: 16),
                         const SizedBox(width: 4),
                         Text(
-                          '이 가게의 청찬 배지',
+                          '이 가게의 칭찬 배지',
                           style: TextStyle(
                             fontSize: 13,
                             color: AppColors.textSecondary,
@@ -194,7 +209,7 @@ class StoreDetailPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.brown,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -250,6 +265,198 @@ class StoreDetailPage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 24),
+
+                    // Action Buttons
+                    Row(
+                      children: [
+                        // Menu Button
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: AppColors.border, width: 1),
+                              backgroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.restaurant_menu,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  '메뉴판 보기',
+                                  style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        
+                        // Stamp Card Button
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: AppColors.border, width: 1),
+                              backgroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.card_giftcard,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  '스탬프 카드',
+                                  style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Store Introduction
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '가게 소개',
+                          style: AppTypography.sectionTitle,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          '쿠덕이네 분식당은 30년 전통의 맛집입니다. 신선한 재료로 만든 떡볶이와 김밥이 인기 메뉴이며, 정성스럽게 만든 음식으로 많은 고객분들께 사랑받고 있습니다.',
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Basic Store Information
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.border, width: 1),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildStoreInfoRow(Icons.place, '서울시 성동구 마장동 123-45'),
+                          const SizedBox(height: 12),
+                          _buildStoreInfoRow(Icons.access_time, '매일 09:00 - 21:00'),
+                          const SizedBox(height: 12),
+                          _buildStoreInfoRow(Icons.phone, '02-1234-5678'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Call and Coupon Buttons
+                    Row(
+                      children: [
+                        // Call Button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.grey400,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.phone,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  '전화하기',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        
+                        // Coupon Use Button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.confirmation_num,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  '쿠폰 사용',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 100), // Bottom padding
                   ],
                 ),
@@ -265,9 +472,9 @@ class StoreDetailPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.primaryLight,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey[200]!, width: 1),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -283,6 +490,71 @@ class StoreDetailPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStoreInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: AppColors.grey700,
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.grey700,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showFavoriteMessage() {
+    final message = _isFavorite 
+        ? "꽥꽥!! 찜목록에 가게를 추가했어요!"
+        : "다음에 만나요!";
+    
+    final icon = _isFavorite 
+        ? Icons.emoji_emotions_rounded
+        : Icons.waving_hand;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text(
+              message,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: _isFavorite ? AppColors.primary : AppColors.grey600,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(
+          bottom: 80,
+          left: 16,
+          right: 16,
+          top: 16,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
