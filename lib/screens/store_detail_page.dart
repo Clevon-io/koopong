@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
 import '../themes/typography.dart';
@@ -9,8 +10,11 @@ class StoreDetailPage extends StatefulWidget {
   State<StoreDetailPage> createState() => _StoreDetailPageState();
 }
 
-class _StoreDetailPageState extends State<StoreDetailPage> {
+class _StoreDetailPageState extends State<StoreDetailPage> with TickerProviderStateMixin {
   bool _isFavorite = false;
+  OverlayEntry? _currentToastOverlay;
+  Timer? _toastTimer;
+  AnimationController? _toastAnimationController;
 
   @override
   Widget build(BuildContext context) {
@@ -522,40 +526,217 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
         ? Icons.emoji_emotions_rounded
         : Icons.waving_hand;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Text(
-              message,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
-          ],
+    _showCustomToast(message, icon);
+  }
+
+  void _showCustomToast(String message, IconData icon) {
+    // 기존 토스트와 타이머 제거
+    _removeCurrentToast();
+
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+
+    // 애니메이션 컨트롤러 생성
+    _toastAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    // 아래에서 위로 슬라이드 애니메이션
+    final slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 50), // 아래쪽에서 시작
+      end: const Offset(0, 0),    // 원래 위치로
+    ).animate(CurvedAnimation(
+      parent: _toastAnimationController!,
+      curve: Curves.easeOutBack,
+    ));
+
+    // 등장 시 투명도 애니메이션
+    final opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _toastAnimationController!,
+      curve: Curves.easeOut,
+    ));
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + kToolbarHeight + 20,
+        left: 0,
+        right: 0,
+        child: Center(
+          child: AnimatedBuilder(
+            animation: _toastAnimationController!,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: slideAnimation.value,
+                child: Opacity(
+                  opacity: opacityAnimation.value,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: _isFavorite ? AppColors.primary : AppColors.grey600,
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            icon,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            message,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
-        backgroundColor: _isFavorite ? AppColors.primary : AppColors.grey600,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(
-          bottom: 80,
-          left: 16,
-          right: 16,
-          top: 16,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        ),
-        duration: const Duration(seconds: 2),
       ),
     );
+
+    // 새 토스트와 타이머를 멤버 변수에 저장
+    _currentToastOverlay = overlayEntry;
+    overlay.insert(overlayEntry);
+
+    // 등장 애니메이션 시작
+    _toastAnimationController!.forward();
+
+    // 1.5초 후 퇴장 애니메이션 시작
+    _toastTimer = Timer(const Duration(milliseconds: 1500), () {
+      _hideToastWithAnimation();
+    });
+  }
+
+  void _hideToastWithAnimation() {
+    if (_currentToastOverlay != null && _toastAnimationController != null) {
+      // 투명도만 변화하는 퇴장 애니메이션 컨트롤러 생성
+      final fadeController = AnimationController(
+        duration: const Duration(milliseconds: 300),
+        vsync: this,
+      );
+
+      final fadeAnimation = Tween<double>(
+        begin: 1.0,
+        end: 0.0,
+      ).animate(CurvedAnimation(
+        parent: fadeController,
+        curve: Curves.easeOut,
+      ));
+
+      // 기존 overlay 제거하고 새로운 fade-out overlay 생성
+      final overlay = Overlay.of(context);
+      final message = _isFavorite 
+          ? "꽥꽥!! 찜목록에 가게를 추가했어요!"
+          : "다음에 만나요!";
+      
+      final icon = _isFavorite 
+          ? Icons.emoji_emotions_rounded
+          : Icons.waving_hand;
+
+      _currentToastOverlay?.remove();
+
+      final fadeOverlayEntry = OverlayEntry(
+        builder: (context) => Positioned(
+          top: MediaQuery.of(context).padding.top + kToolbarHeight + 20,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: AnimatedBuilder(
+              animation: fadeAnimation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: fadeAnimation.value,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: _isFavorite ? AppColors.primary : AppColors.grey600,
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            icon,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            message,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      overlay.insert(fadeOverlayEntry);
+      _currentToastOverlay = fadeOverlayEntry;
+
+      // 퇴장 애니메이션 시작
+      fadeController.forward().then((_) {
+        fadeController.dispose();
+        _removeCurrentToast();
+      });
+    }
+  }
+
+  void _removeCurrentToast() {
+    _toastTimer?.cancel();
+    _toastTimer = null;
+    
+    _toastAnimationController?.dispose();
+    _toastAnimationController = null;
+    
+    _currentToastOverlay?.remove();
+    _currentToastOverlay = null;
+  }
+
+  @override
+  void dispose() {
+    _removeCurrentToast();
+    super.dispose();
   }
 }
