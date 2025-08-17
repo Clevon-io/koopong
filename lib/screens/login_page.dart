@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import '../themes/colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Remember Login & Find Account
                 Row(
@@ -190,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -259,6 +260,36 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                   ],
+                ),
+                const SizedBox(height: 24),
+
+                // Sign Up Link
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: '아직 쿠퐁회원이 아니신가요? ',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '바로 회원가입하기',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('회원가입 페이지로 이동')),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 32),
               ],
