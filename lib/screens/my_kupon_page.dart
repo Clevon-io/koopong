@@ -283,7 +283,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
                 Expanded(
                   child: _buildActivityItem(
                     context,
-                    Icons.favorite_outline,
+                    Icons.favorite,
                     '단골 가게',
                     stats['favoriteStores']!,
                     () => _navigateToFavoriteStores(context),
@@ -293,7 +293,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
                 Expanded(
                   child: _buildActivityItem(
                     context,
-                    Icons.rate_review_outlined,
+                    Icons.rate_review,
                     '내가 쓴 리뷰',
                     stats['reviews']!,
                     () => _navigateToMyReviews(context),
@@ -373,7 +373,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
               style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.primary,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -400,6 +400,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
+            overlayColor: AppColors.error.withValues(alpha: 0.1),
           ),
           child: const Text(
             '로그아웃',
@@ -600,17 +601,17 @@ class _MyKuponPageState extends State<MyKuponPage> {
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+          border: Border.all(color: AppColors.primary),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
-              Icons.store_outlined,
+              Icons.store,
               size: 20,
-              color: AppColors.primary,
+              color: Colors.white,
             ),
             const SizedBox(width: 8),
             const Text(
@@ -618,7 +619,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primary,
+                color: Colors.white,
               ),
             ),
           ],
