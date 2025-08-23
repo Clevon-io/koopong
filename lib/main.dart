@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'themes/colors.dart';
 import 'themes/typography.dart';
@@ -7,8 +8,15 @@ import 'screens/my_coupons_page.dart';
 import 'screens/my_kupon_page.dart';
 import 'screens/my_stamps_page.dart';
 import 'screens/login_page.dart';
+import 'screens/login_required_page.dart';
+import 'services/auth_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // AuthService 초기화
+  await AuthService().initializeAuth();
+  
   runApp(const MyApp());
 }
 
@@ -37,7 +45,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: const IconThemeData(color: AppColors.textSecondary),
       ),
-      home: const HomePage(),
+      home: HomePage(key: _homePageKey),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -48,24 +56,47 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
+
+  // 외부에서 탭 이동을 위한 static 메서드
+  static void navigateToTab(int index) {
+    if (kDebugMode) {
+      print('HomePage.navigateToTab called with index: $index');
+      print('_homePageKey.currentState: ${_homePageKey.currentState}');
+    }
+    _homePageKey.currentState?._switchToTab(index);
+  }
 }
+
+// GlobalKey를 클래스 외부에서 선언
+final GlobalKey<_HomePageState> _homePageKey = GlobalKey<_HomePageState>();
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final PageController _bannerController = PageController();
   Timer? _bannerTimer;
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
     _startBannerTimer();
+    
+    // AuthService 변경사항 리스닝
+    _authService.addListener(_onAuthStateChanged);
   }
 
   @override
   void dispose() {
     _bannerTimer?.cancel();
     _bannerController.dispose();
+    _authService.removeListener(_onAuthStateChanged);
     super.dispose();
+  }
+
+  void _onAuthStateChanged() {
+    setState(() {
+      // 로그인 상태 변경 시 UI 업데이트
+    });
   }
 
   void _startBannerTimer() {
@@ -81,6 +112,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // 탭 이동 메서드
+  void _switchToTab(int index) {
+    if (kDebugMode) {
+      print('Switching to tab: $index');
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +129,14 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
+          // 스탬프와 내 쿠폰 탭은 로그인이 필요
+          if ((index == 1 || index == 2) && !_authService.isLoggedIn) {
+            setState(() {
+              _selectedIndex = index;
+            });
+            return;
+          }
+          
           setState(() {
             _selectedIndex = index;
           });
@@ -108,8 +157,22 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomePage();
       case 1:
+        if (!_authService.isLoggedIn) {
+          return const LoginRequiredPage(
+            featureName: '🏆 내 스탬프',
+            icon: Icons.verified,
+            description: '스탬프를 적립하고 무료 음료와 할인 혜택을 받아보세요!\n로그인하면 나만의 스탬프 현황을 확인할 수 있어요.',
+          );
+        }
         return const MyStampsPage();
       case 2:
+        if (!_authService.isLoggedIn) {
+          return const LoginRequiredPage(
+            featureName: '내 쿠폰',
+            icon: Icons.local_play_rounded,
+            description: '받은 쿠폰을 관리하고 할인 혜택을 놓치지 마세요!\n로그인하면 쿠폰 사용 기한과 혜택을 한눈에 볼 수 있어요.',
+          );
+        }
         return const MyCouponsPage();
       case 3:
         return const MyKuponPage();
@@ -137,22 +200,51 @@ class _HomePageState extends State<HomePage> {
                 color: AppColors.textSecondary,
               ),
               const Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(_createSlideRoute());
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.textSecondary,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                ),
-                child: const Text(
-                  '로그인',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+              if (!_authService.isLoggedIn) ...[
+                TextButton(
+                  onPressed: () async {
+                    await _authService.tempLogin(context);
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  ),
+                  child: const Text(
+                    '임시 로그인',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(width: 4),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(_createSlideRoute());
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.textSecondary,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  ),
+                  child: const Text(
+                    '로그인',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ] else ...[
+                Text(
+                  '${_authService.currentUser?.nickname ?? '사용자'}님',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
               const SizedBox(width: 8),
               IconButton(
                 onPressed: () {},
