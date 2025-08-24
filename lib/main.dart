@@ -10,6 +10,8 @@ import 'screens/my_stamps_page.dart';
 import 'screens/login_page.dart';
 import 'screens/login_required_page.dart';
 import 'screens/store_stamp_detail_page.dart';
+import 'screens/store_review_page.dart';
+import 'widgets/floating_review_widget.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -126,7 +128,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getSelectedPage(),
+      body: Stack(
+        children: [
+          _getSelectedPage(),
+          // 스탬프 탭에서만 플로팅 리뷰 위젯 표시
+          if (_selectedIndex == 1 && _authService.isLoggedIn) _buildFloatingReviewWidget(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -730,6 +738,27 @@ class _HomePageState extends State<HomePage> {
         );
       },
       transitionDuration: const Duration(milliseconds: 400),
+    );
+  }
+
+  Widget _buildFloatingReviewWidget() {
+    // 임시 스탬프 데이터 - 실제로는 MyStampsPage에서 가져와야 함
+    return AnimatedFloatingReviewWidget(
+      storeId: 'store_001',
+      storeName: '감성커피 양산점',
+      storeImageUrl: 'assets/coffeeshop_1.jpg',
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const StoreReviewPage(
+              storeId: 'store_001',
+              storeName: '감성커피 양산점',
+              storeImageUrl: 'assets/coffeeshop_1.jpg',
+            ),
+          ),
+        );
+      },
     );
   }
 }
