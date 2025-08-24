@@ -88,12 +88,7 @@ class _MyCouponsPageState extends State<MyCouponsPage>
       appBar: AppBar(
         title: const Text(
           '🎟️ 내 쿠폰함',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pretendard',
-            color: AppColors.textPrimary,
-          ),
+          style: AppTypography.appBarTitle,
         ),
         backgroundColor: AppColors.surface,
         elevation: 0,

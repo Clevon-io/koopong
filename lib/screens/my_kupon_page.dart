@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../themes/colors.dart';
+import '../themes/typography.dart';
 import 'login_page.dart';
 import '../services/auth_service.dart';
 import 'notification_settings_page.dart';
@@ -213,7 +214,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
           Text(
             '${user?.nickname ?? '사용자'}님',
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
@@ -269,11 +270,7 @@ class _MyKuponPageState extends State<MyKuponPage> {
             padding: EdgeInsets.all(16),
             child: Text(
               '나의 활동',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
+              style: AppTypography.sectionTitle,
             ),
           ),
           Padding(

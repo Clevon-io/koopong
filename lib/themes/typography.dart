@@ -121,4 +121,12 @@ class AppTypography {
     fontFamily: fontFamily,
     color: AppColors.textPrimary,
   );
+  
+  // AppBar title style
+  static const TextStyle appBarTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    fontFamily: fontFamily,
+    color: AppColors.textPrimary,
+  );
 }

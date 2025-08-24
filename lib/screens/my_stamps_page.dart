@@ -34,12 +34,7 @@ class _MyStampsPageState extends State<MyStampsPage> {
       appBar: AppBar(
         title: const Text(
           '🏆 내 스탬프',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pretendard',
-            color: AppColors.textPrimary,
-          ),
+          style: AppTypography.appBarTitle,
         ),
         backgroundColor: AppColors.surface,
         elevation: 0,
