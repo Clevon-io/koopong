@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../themes/colors.dart';
 import '../themes/typography.dart';
+import 'store_stamp_detail_page.dart';
 
 class StoreDetailPage extends StatefulWidget {
   const StoreDetailPage({super.key});
@@ -312,7 +313,18 @@ class _StoreDetailPageState extends State<StoreDetailPage> with TickerProviderSt
                         // Stamp Card Button
                         Expanded(
                           child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const StoreStampDetailPage(
+                                    storeId: 'store_001',
+                                    storeName: '쿠덕이네 분식당',
+                                    storeImageUrl: 'assets/coffeeshop_4.jpg',
+                                  ),
+                                ),
+                              );
+                            },
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(color: AppColors.border, width: 1),
                               backgroundColor: Colors.white,

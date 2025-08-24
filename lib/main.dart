@@ -9,6 +9,7 @@ import 'screens/my_kupon_page.dart';
 import 'screens/my_stamps_page.dart';
 import 'screens/login_page.dart';
 import 'screens/login_required_page.dart';
+import 'screens/store_stamp_detail_page.dart';
 import 'services/auth_service.dart';
 
 void main() async {
