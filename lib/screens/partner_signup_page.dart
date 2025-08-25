@@ -12,7 +12,7 @@ class PartnerSignupPage extends StatefulWidget {
   State<PartnerSignupPage> createState() => _PartnerSignupPageState();
 }
 
-class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTickerProviderStateMixin {
+class _PartnerSignupPageState extends State<PartnerSignupPage> {
   SignupMethod? _selectedMethod;
   SnsProvider? _selectedSnsProvider;
   final _formKey = GlobalKey<FormState>();
@@ -27,33 +27,6 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
   bool _isEmailVerified = false;
   bool _isNicknameVerified = false;
   bool _showSnsInfo = false;
-  
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-    ));
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.5),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.2, 1.0, curve: Curves.easeOutBack),
-    ));
-  }
 
   @override
   void dispose() {
@@ -62,7 +35,6 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
     _passwordConfirmController.dispose();
     _nicknameController.dispose();
     _nameController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -301,205 +273,185 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
   }
 
   Widget _buildSnsInfoConfirmation() {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Column(
-          children: [
-            // Selected SNS Provider Button (moved to top)
-            SlideTransition(
-              position: _slideAnimation,
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: _buildSelectedSnsButton(),
-              ),
-            ),
-            
-            const SizedBox(height: 32),
+    return Column(
+      children: [
+        // Selected SNS Provider Button (moved to top)
+        _buildSelectedSnsButton(),
+        
+        const SizedBox(height: 32),
 
-            // SNS Info Section
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '연동된 계정 정보',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    
-                    // Email Info
-                    Row(
-                      children: [
-                        const Icon(Icons.email, size: 20, color: AppColors.textSecondary),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              '이메일',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              _emailController.text.isNotEmpty 
-                                ? _emailController.text 
-                                : _getSnsEmail(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    
-                    const SizedBox(height: 16),
-                    
-                    // Name Info
-                    Row(
-                      children: [
-                        const Icon(Icons.person, size: 20, color: AppColors.textSecondary),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              '이름',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              _nameController.text.isNotEmpty 
-                                ? _nameController.text 
-                                : _getSnsName(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Nickname Input
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: _buildVerificationField(
-                controller: _nicknameController,
-                label: '닉네임',
-                hintText: '사용하실 닉네임을 입력하세요',
-                isVerified: _isNicknameVerified,
-                onVerify: () {
-                  if (_nicknameController.text.isNotEmpty) {
-                    setState(() {
-                      _isNicknameVerified = true;
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('닉네임 사용 가능')),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('닉네임을 입력해주세요')),
-                    );
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '닉네임을 입력해주세요';
-                  }
-                  if (!_isNicknameVerified) {
-                    return '닉네임 중복 확인을 해주세요';
-                  }
-                  return null;
-                },
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Continue Button
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isNicknameVerified ? () {
-                    _navigateToStoreRegistration();
-                  } : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    '가게 등록 단계로 이동',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Back Button
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _showSnsInfo = false;
-                  _selectedSnsProvider = null;
-                  _isNicknameVerified = false;
-                  _nicknameController.clear();
-                });
-              },
-              child: const Text(
-                '다른 계정으로 가입하기',
+        // SNS Info Section
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.primaryLight,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '연동된 계정 정보',
                 style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
+              const SizedBox(height: 16),
+              
+              // Email Info
+              Row(
+                children: [
+                  const Icon(Icons.email, size: 20, color: AppColors.textSecondary),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '이메일',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        _emailController.text.isNotEmpty 
+                          ? _emailController.text 
+                          : _getSnsEmail(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Name Info
+              Row(
+                children: [
+                  const Icon(Icons.person, size: 20, color: AppColors.textSecondary),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '이름',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        _nameController.text.isNotEmpty 
+                          ? _nameController.text 
+                          : _getSnsName(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Nickname Input
+        _buildVerificationField(
+          controller: _nicknameController,
+          label: '닉네임',
+          hintText: '사용하실 닉네임을 입력하세요',
+          isVerified: _isNicknameVerified,
+          onVerify: () {
+            if (_nicknameController.text.isNotEmpty) {
+              setState(() {
+                _isNicknameVerified = true;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('닉네임 사용 가능')),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('닉네임을 입력해주세요')),
+              );
+            }
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '닉네임을 입력해주세요';
+            }
+            if (!_isNicknameVerified) {
+              return '닉네임 중복 확인을 해주세요';
+            }
+            return null;
+          },
+        ),
+
+        const SizedBox(height: 32),
+
+        // Continue Button
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _isNicknameVerified ? () {
+              _navigateToStoreRegistration();
+            } : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ],
-        );
-      },
+            child: const Text(
+              '입점 신청하러 가기',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        // Back Button
+        TextButton(
+          onPressed: () {
+            setState(() {
+              _showSnsInfo = false;
+              _selectedSnsProvider = null;
+              _isNicknameVerified = false;
+              _nicknameController.clear();
+            });
+          },
+          child: const Text(
+            '다른 계정으로 가입하기',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -550,7 +502,7 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
           Icon(icon, size: 20, color: textColor),
           const SizedBox(width: 8),
           Text(
-            '$text로 가입',
+            '$text으로 가입',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -766,7 +718,7 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
                 ),
               ),
               child: const Text(
-                '가게 등록 단계로 이동',
+                '입점 신청하기',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -956,7 +908,6 @@ class _PartnerSignupPageState extends State<PartnerSignupPage> with SingleTicker
       _emailController.text = _getSnsEmail();
       _nameController.text = _getSnsName();
     });
-    _animationController.forward();
   }
 
   String _getSnsEmail() {

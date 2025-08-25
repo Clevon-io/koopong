@@ -528,6 +528,7 @@ class _StoreRegistrationPageState extends State<StoreRegistrationPage> {
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.border),
+                  backgroundColor: AppColors.grey100,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -536,13 +537,14 @@ class _StoreRegistrationPageState extends State<StoreRegistrationPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.arrow_back, size: 16),
+                    const Icon(Icons.arrow_back, size: 16, color: AppColors.textSecondary),
                     const SizedBox(width: 4),
                     Text(
                       '이전${_getPreviousStepInfo()}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
