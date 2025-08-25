@@ -311,13 +311,16 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: 250,
+              height: 280,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                ),
                 itemCount: 3,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 12),
+                separatorBuilder: (context, index) => SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.03,
+                ),
                 itemBuilder: (context, index) {
                   return _buildPopularStoreCard(index);
                 },
@@ -346,13 +349,16 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: 250,
+              height: 285,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                ),
                 itemCount: 3,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 12),
+                separatorBuilder: (context, index) => SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.03,
+                ),
                 itemBuilder: (context, index) {
                   return _buildNewStoreCard(index);
                 },
@@ -377,13 +383,16 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: 200,
+              height: 225,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                ),
                 itemCount: 2,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 12),
+                separatorBuilder: (context, index) => SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.03,
+                ),
                 itemBuilder: (context, index) {
                   return _buildCouponCard(index);
                 },
@@ -398,7 +407,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSectionTitle(String title, {VoidCallback? onViewAllTap}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -444,7 +455,9 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final banner = banners[index];
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
+            margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04,
+            ),
             decoration: BoxDecoration(
               color: (banner['color'] as Color).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
@@ -454,7 +467,9 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -462,10 +477,12 @@ class _HomePageState extends State<HomePage> {
                       banner['text'] as String,
                       style: TextStyle(
                         color: banner['color'] as Color,
-                        fontSize: 15,
+                        fontSize: MediaQuery.of(context).size.width < 360 ? 13 : 15,
                         fontWeight: FontWeight.w600,
                       ),
                       textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -474,7 +491,7 @@ class _HomePageState extends State<HomePage> {
                         color: (banner['color'] as Color).withValues(
                           alpha: 0.7,
                         ),
-                        fontSize: 11,
+                        fontSize: MediaQuery.of(context).size.width < 360 ? 10 : 11,
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
@@ -491,7 +508,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildRecommendationCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+      ),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -509,8 +528,14 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               Container(
-                width: 80,
-                height: 80,
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.width * 0.2,
+                constraints: const BoxConstraints(
+                  minWidth: 60,
+                  maxWidth: 100,
+                  minHeight: 60,
+                  maxHeight: 100,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   image: const DecorationImage(
@@ -577,8 +602,12 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(builder: (context) => const StoreDetailPage()),
         );
       },
-      child: SizedBox(
-        width: 160,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.4,
+        constraints: const BoxConstraints(
+          minWidth: 140,
+          maxWidth: 200,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -651,8 +680,12 @@ class _HomePageState extends State<HomePage> {
           MaterialPageRoute(builder: (context) => const StoreDetailPage()),
         );
       },
-      child: SizedBox(
-        width: 160, // Added fixed width for horizontal ListView
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.4,
+        constraints: const BoxConstraints(
+          minWidth: 140,
+          maxWidth: 200,
+        ), // Responsive width for horizontal ListView
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -718,7 +751,11 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Container(
-      width: 180, // Added fixed width for horizontal ListView
+      width: MediaQuery.of(context).size.width * 0.45,
+      constraints: const BoxConstraints(
+        minWidth: 160,
+        maxWidth: 220,
+      ), // Responsive width for horizontal ListView
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),

@@ -223,8 +223,14 @@ class _StoreListPageState extends State<StoreListPage> {
         child: Row(
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
+              constraints: const BoxConstraints(
+                minWidth: 60,
+                maxWidth: 100,
+                minHeight: 60,
+                maxHeight: 100,
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
@@ -299,8 +305,14 @@ class _StoreListPageState extends State<StoreListPage> {
         child: Row(
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
+              constraints: const BoxConstraints(
+                minWidth: 60,
+                maxWidth: 100,
+                minHeight: 60,
+                maxHeight: 100,
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
@@ -460,8 +472,14 @@ class _StoreListPageState extends State<StoreListPage> {
         child: Row(
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
+              constraints: const BoxConstraints(
+                minWidth: 60,
+                maxWidth: 100,
+                minHeight: 60,
+                maxHeight: 100,
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
