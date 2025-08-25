@@ -13,6 +13,7 @@ import 'screens/store_stamp_detail_page.dart';
 import 'screens/store_review_page.dart';
 import 'widgets/floating_review_widget.dart';
 import 'services/auth_service.dart';
+import 'screens/store_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -275,13 +276,39 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
 
             // Recommendation Section
-            _buildSectionTitle('쿠덕이의 강력 추천'),
+            _buildSectionTitle(
+              '쿠덕이의 강력 추천',
+              onViewAllTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StoreListPage(
+                      viewMode: ViewMode.recommendation,
+                      title: '쿠덕이의 강력 추천',
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             _buildRecommendationCard(),
             const SizedBox(height: 24),
 
             // Popular Stores Section
-            _buildSectionTitle('우리 동네 인기 가게 🏆'),
+            _buildSectionTitle(
+              '우리 동네 인기 가게 🏆',
+              onViewAllTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StoreListPage(
+                      viewMode: ViewMode.popular,
+                      title: '우리 동네 인기 가게',
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 250,
@@ -303,7 +330,20 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
 
             // New Stores Section
-            _buildSectionTitle('우리 동네 신규 상점'),
+            _buildSectionTitle(
+              '우리 동네 신규 상점',
+              onViewAllTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StoreListPage(
+                      viewMode: ViewMode.newStore,
+                      title: '우리 동네 신규 상점',
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 250,
@@ -321,7 +361,20 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
 
             // Coupon Section
-            _buildSectionTitle('대박 쿠폰 time ⚡️ 기간 한정'),
+            _buildSectionTitle(
+              '대박 쿠폰 time ⚡️ 기간 한정',
+              onViewAllTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StoreListPage(
+                      viewMode: ViewMode.coupon,
+                      title: '대박 쿠폰 time',
+                    ),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 200,
@@ -343,7 +396,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, {VoidCallback? onViewAllTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -351,9 +404,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text(title, style: AppTypography.sectionTitle),
           GestureDetector(
-            onTap: () {
-              // Navigate to view all page
-            },
+            onTap: onViewAllTap,
             child: Row(
               children: [
                 Text(
